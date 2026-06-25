@@ -960,8 +960,7 @@ function applyLang() {
 // ── API 키 관리 ───────────────────────────────────────────
 function saveApiKey() {
   const key = document.getElementById('apiKeyInput').value.trim();
-  if (!key) { alert(lang === "ko" ? "API 키를 입력해주세요." : "Please enter your API key."); return; }
-  }
+  if (!key) { alert(lang === 'ko' ? 'API 키를 입력해주세요.' : 'Please enter your API key.'); return; }
   apiKey = key;
   localStorage.setItem('geminiKey', key);
   showApp();
