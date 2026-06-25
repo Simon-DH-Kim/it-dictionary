@@ -687,7 +687,7 @@ header {
     </div>
 
     <div class="api-input-wrap">
-      <input type="password" id="apiKeyInput" placeholder="AIza..." autocomplete="off" />
+      <input type="password" id="apiKeyInput" placeholder="API 키를 붙여넣으세요..." autocomplete="off" />
       <button class="btn-primary" onclick="saveApiKey()" id="apiSaveBtn">저장</button>
     </div>
     <div class="api-note" id="apiNote">무료 · 신용카드 불필요 · 하루 1,500회 제공</div>
@@ -960,9 +960,7 @@ function applyLang() {
 // ── API 키 관리 ───────────────────────────────────────────
 function saveApiKey() {
   const key = document.getElementById('apiKeyInput').value.trim();
-  if (!key.startsWith('AIza')) {
-    alert(lang === 'ko' ? 'API 키 형식이 올바르지 않아요. "AIza"로 시작하는 키를 입력해주세요.' : 'Invalid key format. It should start with "AIza".');
-    return;
+  if (!key) { alert(lang === "ko" ? "API 키를 입력해주세요." : "Please enter your API key."); return; }
   }
   apiKey = key;
   localStorage.setItem('geminiKey', key);
