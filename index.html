@@ -1168,16 +1168,10 @@ async function callGemini(userMsg, systemInstruction) {
     body.systemInstruction = { parts: [{ text: systemInstruction }] };
   }
 
-  // AQ. 토큰이면 Bearer 방식, AIza면 API 키 방식
-  const isBearer = apiKey.startsWith('AQ.');
-  const url = isBearer
-    ? 'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent'
-    : `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent?key=${apiKey}`;
-  const headers = isBearer
-    ? { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` }
-    : { 'Content-Type': 'application/json' };
-
-  const res = await fetch(url, { method: 'POST', headers, body: JSON.stringify(body) });
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent?key=${encodeURIComponent(apiKey)}`,
+    { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
+  );
 
   if (!res.ok) {
     const err = await res.json();
