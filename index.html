@@ -905,6 +905,11 @@ function setLang(l) {
   lang = l;
   localStorage.setItem('lang', l);
   applyLang();
+  // 검색 결과가 있으면 현재 용어를 새 언어로 다시 검색
+  const currentTerm = document.getElementById('termInput').value.trim();
+  if (currentTerm && document.getElementById('result').classList.contains('visible')) {
+    search();
+  }
 }
 
 function applyLang() {
@@ -1155,11 +1160,13 @@ function renderResult(d) {
   const jg = document.getElementById('jobGrid');
   jg.innerHTML = '';
   (d.jobUses || []).forEach(j => {
+    const icon = j.icon && j.icon !== 'undefined' ? j.icon : '💼';
+    const role = j.role && j.role !== 'undefined' ? j.role : '';
     jg.innerHTML += `
       <div class="job-item">
-        <div class="job-header"><span class="job-icon">${j.icon}</span><span class="job-role">${j.role}</span></div>
-        <div class="job-benefit">✓ ${j.benefit}</div>
-        <div class="job-use">${j.usage}</div>
+        <div class="job-header"><span class="job-icon">${icon}</span><span class="job-role">${role}</span></div>
+        <div class="job-benefit">✓ ${j.benefit || ''}</div>
+        <div class="job-use">${j.usage || ''}</div>
       </div>`;
   });
 
@@ -1191,6 +1198,8 @@ function renderResult(d) {
   });
 
   showResult();
+  // 결과가 표시된 후 그래프 다시 그리기 (캔버스 크기 재계산)
+  setTimeout(() => drawGraph(d.term, d.ontology), 100);
   window.scrollTo({ top: document.getElementById('result').offsetTop - 80, behavior: 'smooth' });
 }
 
