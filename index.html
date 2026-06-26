@@ -1147,7 +1147,12 @@ Respond ONLY in JSON format below. No markdown, pure JSON only.
   try {
     const userMsg = lang === 'ko' ? `이 IT 용어를 설명해주세요: ${term}` : `Explain this IT term: ${term}`;
     const raw = await callGemini(userMsg, systemPrompt);
-    const parsed = JSON.parse(raw.replace(/```json|```/g, '').trim());
+    let cleaned = raw.replace(/```json|```/g, '').trim();
+    // JSON 블록만 추출
+    const first = cleaned.indexOf('{');
+    const last = cleaned.lastIndexOf('}');
+    if (first >= 0 && last >= 0) cleaned = cleaned.slice(first, last + 1);
+    const parsed = JSON.parse(cleaned);
     renderResult(parsed);
     addHistory(term);
   } catch (err) {
